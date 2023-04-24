@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-public class DatabaseContext : DbContext
+public class TodoDatabaseContext : DbContext
 {
 
-    public DatabaseContext(DbContextOptions options) : base(options) { }
+    public TodoDatabaseContext(DbContextOptions options) : base(options) { }
 
     public DbSet<Database.tables.TodoTask> Tasks { get; set; }
 

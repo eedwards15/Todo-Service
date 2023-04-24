@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Profiles;
 
@@ -13,14 +14,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(TaskAutoMapperProfile));
 
 
-string connectionString = builder.Configuration.GetConnectionString("ConnectionStrings");
-string password = Environment.GetEnvironmentVariable("SQL_SERVER_PASSWORD");
+string connectionString = builder.Configuration.GetConnectionString("TodoDb");
+string password = Environment.GetEnvironmentVariable("SQL_SERVER_PASSWORD") ;
 string username = Environment.GetEnvironmentVariable("SQL_SERVER_USERNAME");
 connectionString = connectionString.Replace("{password}", password);
-connectionString = connectionString.Replace("{usernme}", username);
+connectionString = connectionString.Replace("{username}", username);
 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
-
+builder.Services.AddDbContext<TodoDatabaseContext>(options =>
+            {
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseSqlServer(connectionString, sqlServerOptions =>
+                    sqlServerOptions.MigrationsAssembly("Database"));
+            }, ServiceLifetime.Transient);
+ 
 
 var app = builder.Build();
 
