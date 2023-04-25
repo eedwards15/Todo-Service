@@ -1,3 +1,5 @@
+using Database.interfaces;
+using Database.repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(TaskAutoMapperProfile));
-
+builder.Services.AddTransient<ITodoRepository, TodoRepository>();
 
 string connectionString = builder.Configuration.GetConnectionString("TodoDb");
 string password = Environment.GetEnvironmentVariable("SQL_SERVER_PASSWORD") ;
