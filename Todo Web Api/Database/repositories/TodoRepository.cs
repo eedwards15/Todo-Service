@@ -12,9 +12,9 @@ namespace Database.repositories
 
     public class TodoRepository : ITodoRepository
     {
-        private readonly DatabaseContext _context;
+        private readonly TodoDatabaseContext _context;
 
-        public TodoRepository(DatabaseContext context)
+        public TodoRepository(TodoDatabaseContext context)
         {
             _context = context;
         }

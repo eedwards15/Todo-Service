@@ -8,7 +8,7 @@
         public DateTime DueDate { get; set; }
         public bool Completed { get; set; }
         public int ProjectId { get; set; }
-        public List<TaskViewModel> Subtasks { get; set; }
+
     }
 
 }

@@ -8,8 +8,7 @@ namespace Profiles
     {
         public TaskAutoMapperProfile()
         {
-            CreateMap<Task, TaskViewModel>()
-                .ForMember(dest => dest.Subtasks, opt => opt.MapFrom(src => src))
+            CreateMap<Database.tables.TodoTask, TaskViewModel>()
                 .ReverseMap();
         }
     }

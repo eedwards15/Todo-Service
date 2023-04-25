@@ -18,52 +18,57 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<TaskViewModel> GetById(int id)
-    {
-        var task = _repository.Get(id);
-        if (task == null)
-        {
-            return NotFound();
-        }
-        return Ok(_mapper.Map<TaskViewModel>(task));
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TaskViewModel>>> GetAll()
-    {
-        var tasks = await _repository.GetAll();
-        
-
-        if (tasks == null || !tasks.Any())
-        {
-            return NotFound();
-        }
-        return Ok(_mapper.Map<IEnumerable<TaskViewModel>>(tasks));
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<TaskViewModel>> Create(TaskViewModel taskViewModel)
-    {
-        var task = _mapper.Map<Database.tables.TodoTask>(taskViewModel);
-        await _repository.Add(task);
-        return CreatedAtAction(nameof(GetById), new { id = task.Id }, _mapper.Map<TaskViewModel>(task));
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult<TaskViewModel>> Update(int id, TaskViewModel taskViewModel)
+    public async Task<ActionResult<TaskViewModel>> GetById(int id)
     {
         var task = await _repository.Get(id);
         if (task == null)
         {
             return NotFound();
         }
-        _mapper.Map(taskViewModel, task);
-        await _repository.Update(task);
-        return NoContent();
+
+
+        var response = _mapper.Map<TaskViewModel>(task);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<TaskViewModel>>> GetAll()
+    {
+        var tasks = await _repository.GetAll();
+        if (tasks == null || !tasks.Any())
+        {
+            return NotFound();
+        }
+
+        var response = _mapper.Map<IEnumerable<TaskViewModel>>(tasks);
+        return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<TaskViewModel>> Create([FromBody] TaskViewModel taskViewModel)
+    {
+        var task = _mapper.Map<Database.tables.TodoTask>(taskViewModel);
+        await _repository.Add(task);
+        var response = _mapper.Map<TaskViewModel>(task);
+        return  Ok(response);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<TaskViewModel>> Update(int id, [FromBody] TaskViewModel taskViewModel)
+    {
+        var task = await _repository.Get(id);
+        if (task == null || id != taskViewModel.Id)
+        {
+            return NotFound();
+        }
+
+        var fromBody = _mapper.Map(taskViewModel, task);
+        await _repository.Update(fromBody);
+        return Ok(fromBody);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<TaskViewModel>> Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
         var task = await _repository.Get(id);
         if (task == null)
@@ -71,6 +76,6 @@ public class TaskController : ControllerBase
             return NotFound();
         }
         await _repository.Delete(id);
-        return Ok(_mapper.Map<TaskViewModel>(task));
+        return Ok();
     }
 }
