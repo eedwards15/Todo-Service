@@ -37,7 +37,7 @@ namespace Database.repositories
 
         public async Task<tables.TodoTask> Get(int id)
         {
-            return await _context.Tasks.FindAsync(id);
+            return await _context.Tasks.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<tables.TodoTask>> GetAll()
