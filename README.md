@@ -1,8 +1,9 @@
 # Todo Service
-### Current Version: 1.0.0
+## Work in Progress
 
 ## Description
 This is a simple Todo service that allows users to create, read, update, and delete todo items.
+
 
 
 ### Endpoints
@@ -40,13 +41,8 @@ This is a simple Todo service that allows users to create, read, update, and del
 ### Migrations
     dotnet ef migrations add init --startup-project "../Todo Web Api"
 
-    
 
 ## Version History
 * 1.0.0
     * Initial Release
-  
-
-
-
-
+    * Added basic CRUD operations for TodoItems
